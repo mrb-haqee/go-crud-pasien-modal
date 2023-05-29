@@ -1,0 +1,26 @@
+{{ $id := 0 }}
+{{ range .data }}
+
+
+<tr>
+    <td>{{ inc $id 1 }}</td>
+    <td class="text-center">{{ .Model.ID }}</td>
+    <td>{{ .NamaLengkap }}</td>
+    <td class="text-center">{{ .NIK }}</td>
+    <td class="text-center">{{ .Gender }}</td>
+    <td class="text-center">{{ .Umur }}</td>
+    <td class="text-center">{{ .TempatLahir }}, {{ .TanggalLahir }}</td>
+    <td class="text-center">{{ .NoHP }}</td>
+    <td class="text-center">{{ .Alamat }}</td>
+    <td>{{ .Keluhan }}</td>
+    <td>
+        <div class="text-center d-flex justify-content-around">
+            <button data-id="{{ .Model.ID }}" class="btn btn-sm btn-warning update-pasien">Update</button>
+            <button data-id="{{ .Model.ID }}" class="btn btn-sm btn-danger delete-pasien">Delete</button>
+        </div>
+    </td>
+</tr>
+<script>
+    console.log("Data ID:", "{{ .Model.ID }}");
+</script>
+{{ end }}

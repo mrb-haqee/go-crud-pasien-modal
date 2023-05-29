@@ -1,0 +1,88 @@
+<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+            {{ if .data.Model.ID }}
+            <h5 class="modal-title" id="exampleModalLabel">Update Data Pasien</h5>
+            {{ else }}
+            <h5 class="modal-title" id="exampleModalLabel">Tambah Data Pasien</h5>
+            {{ end }}
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+
+            <form id="form-pasien" action="/pasien/store" method="POST">
+
+
+                <div class="mb-3 form-group">
+                    <label for="" class="form-label fw-bold">Nama Lengkap: </label>
+                    <input type="text" name="name_lengkap" id="" value="{{ .data.NamaLengkap }}" class="form-control"
+                        placeholder="Nama Lengkap">
+                </div>
+
+                <div class="mb-3 form-group">
+                    <label for="" class="form-label fw-bold">NIK: </label>
+                    <input type="text" name="nik" value="{{ .data.NIK }}" id="" class=" form-control" placeholder="NIK">
+                </div>
+
+                <div class="mb-3 form-group">
+                    <label for="" class="form-label fw-bold">Gender: </label>
+                    <select name="gender" class="form-control" id="">
+                        <option value="">Pilih Gender</option>
+                        <option value="L" {{ if eq .data.Gender "L" }} selected {{ end }}>Laki-laki</option>
+                        <option value="P" {{ if eq .data.Gender "P" }} selected {{ end }}>Perempuan</option>
+                    </select>
+                </div>
+
+                <div class="mb-3 form-group">
+                    <label for="" class="form-label fw-bold">Umur: </label>
+                    <input type="number" name="umur" value="{{ .data.Umur }}" id="" class=" form-control"
+                        placeholder="Umur">
+                </div>
+
+                <div class="mb-3 form-group">
+                    <label for="" class="form-label fw-bold">Tempat Lahir: </label>
+                    <input type="text" name="tempat_lahir" value="{{ .data.TempatLahir }}" id="" class=" form-control"
+                        placeholder="Tempat Lahir">
+                </div>
+
+                <div class="mb-3 form-group ">
+                    <label for="" class="form-label fw-bold">Tanggal Lahir: </label>
+                    <input type="date" name="tanggal_lahir" value="{{ .data.TanggalLahir }}" id="" class=" form-control"
+                        placeholder="Tanggal Lahir">
+                </div>
+
+                <div class="mb-3 form-group">
+                    <label for="" class="form-label fw-bold">No HP: </label>
+                    <input type="number" name="no_hp" id="" value="{{ .data.NoHP }}" class=" form-control"
+                        placeholder="No HP">
+                </div>
+
+                <div class="mb-3 form-group">
+                    <label for="" class="form-label fw-bold">Alamat: </label>
+                    <input type="text" name="alamat" id="" value="{{ .data.Alamat }}" class=" form-control"
+                        placeholder="Alamat">
+                </div>
+
+                <div class="mb-3 form-group">
+                    <label for="" class="form-label fw-bold">Keluhan: </label>
+                    <textarea type="text" name="keluhan" id="" rows="5" class="form-control"
+                        placeholder="Sakit Hati">{{ .data.Keluhan }}</textarea>
+                </div>
+
+                <div class="modal-footer">
+                    {{ if .data.Model.ID }}
+                    <input type="hidden" name="id" value="{{ .data.Model.ID }}">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    {{ else }}
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save Add</button>
+                    {{ end }}
+                </div>
+            </form>
+
+
+        </div>
+    </div>
+</div>
