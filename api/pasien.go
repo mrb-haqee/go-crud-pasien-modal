@@ -18,9 +18,64 @@ func (api *API) Index(w http.ResponseWriter, r *http.Request) {
 		"data": template.HTML(api.GetData()),
 	}
 
+	log.Print(api.GetData())
+
 	temp, _ := template.ParseFiles("view/home.html")
 	temp.Execute(w, data)
 
+}
+
+func (api *API) Search(w http.ResponseWriter, r *http.Request) {
+
+	r.ParseForm()
+
+	idStr := r.FormValue("search")
+
+	var data map[string]any
+
+	if idStr == "" {
+		data = map[string]any{
+			"message": "ID tidak di isi :)",
+			"data":    template.HTML(api.GetData()),
+		}
+
+	} else {
+
+		id, _ := strconv.Atoi(idStr)
+		var pasien model.Pasien
+
+		err := api.db.FindId(id, &pasien)
+		if err != nil {
+			data = map[string]any{
+				"message": "ID pasien tidak dapat ditemukan",
+			}
+			RespJson(w, http.StatusInternalServerError, data)
+			return
+		}
+
+		buffer := bytes.Buffer{}
+
+		inc := template.FuncMap{
+			"inc": func(a, b int) int {
+				return a + b
+			},
+		}
+
+		dataget := map[string]any{
+			"data": []model.Pasien{pasien},
+		}
+
+		temp, _ := template.New("pasien.html").Funcs(inc).ParseFiles("view/pasien.html")
+
+		temp.ExecuteTemplate(&buffer, "pasien.html", dataget)
+
+		data = map[string]any{
+			"message": "ID pasien berhasil didapatkan",
+			"data":    template.HTML(buffer.String()),
+		}
+	}
+
+	RespJson(w, http.StatusOK, data)
 }
 
 func (api *API) GetData() string {
@@ -83,7 +138,6 @@ func (api *API) Form(w http.ResponseWriter, r *http.Request) {
 func (api *API) Store(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method == http.MethodPost {
-		log.Print("masuk store")
 		r.ParseForm()
 
 		var pasien model.Pasien
@@ -107,14 +161,12 @@ func (api *API) Store(w http.ResponseWriter, r *http.Request) {
 
 		}
 
-		log.Printf("%+v", pasien)
-
 		idStr := r.FormValue("id")
-		data := make(map[string]any)
+		var data map[string]any
 
 		if idStr != "" {
+			//Update
 			id, _ := strconv.Atoi(idStr)
-			log.Println(id)
 			err := api.db.Update(id, pasien)
 			if err != nil {
 				RespError(w, http.StatusInternalServerError, err.Error())
@@ -126,7 +178,7 @@ func (api *API) Store(w http.ResponseWriter, r *http.Request) {
 			}
 
 		} else {
-
+			//Store
 			err := api.db.Add(pasien)
 			if err != nil {
 				RespError(w, http.StatusInternalServerError, err.Error())
@@ -146,14 +198,11 @@ func (api *API) Store(w http.ResponseWriter, r *http.Request) {
 
 func (api *API) Delete(w http.ResponseWriter, r *http.Request) {
 
-	log.Print("masuk delete")
-
 	r.ParseForm()
-	data := make(map[string]any)
+	var data map[string]any
 
 	id, _ := strconv.Atoi(r.FormValue("id"))
 
-	log.Println("ini id delete", id)
 	err := api.db.Delete(id)
 	if err != nil {
 		RespError(w, http.StatusInternalServerError, err.Error())

@@ -23,6 +23,7 @@ func NewAPI(db sql.PasienDB) API {
 	r.HandleFunc("/pasien/form", api.Form).Methods("GET", "POST")
 	r.HandleFunc("/pasien/store", api.Store).Methods("POST")
 	r.HandleFunc("/pasien/delete", api.Delete).Methods("POST")
+	r.HandleFunc("/pasien/search", api.Search).Methods("POST")
 
 	return api
 }

@@ -15,8 +15,9 @@
         <nav class="navbar bg-body-tertiary h-25">
             <div class="container-fluid">
                 <a class="navbar-brand fw-bold">Data Pasien</a>
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Masukan ID" aria-label="Search">
+                <form id="search" class="d-flex" role="search" action="/pasien/search" method="POST">
+                    <input class="form-control me-2" type="search" name="search" placeholder="Masukan ID"
+                        aria-label="Search">
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
             </div>
@@ -86,7 +87,6 @@
 
             $(document).on("click", ".update-pasien", function () {
                 var id = $(this).attr('data-id');
-                console.log(id);
                 $.get(url + "pasien/form?id=" + id, function (html) {
                     $('#pasienModal').html(html).modal('show')
                 });
@@ -101,6 +101,23 @@
                         $('tbody').html(resp.data);
                     }, 'JSON');
                 }
+            })
+
+            $(document).on("submit", "#search", (e) => {
+                e.preventDefault();
+                $.ajax({
+                    type: $("#search").attr('method'),
+                    url: $("#search").attr('action'),
+                    data: $("#search").serialize(),
+                    dataType: "json",
+                    success: (resp) => {
+                        $('tbody').html(resp.data)
+                        // alert(resp.message)
+                    },
+                    error: (resp) => {
+                        alert(resp.responseJSON.error)
+                    }
+                })
             })
 
             $(document).on("submit", "#form-pasien", (e) => {

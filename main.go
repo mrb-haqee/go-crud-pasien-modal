@@ -30,19 +30,6 @@ func main() {
 
 	pasienDB := sql.NewPasien(conn)
 
-	// pasienDB.Add(model.Pasien{
-	// 	NamaLengkap:  "rafli",
-	// 	NIK:          "da",
-	// 	Gender:       "L",
-	// 	Umur:         23,
-	// 	TempatLahir:  "Negara",
-	// 	TanggalLahir: "20-20-2020",
-	// 	NoHP:         21414123,
-	// 	Alamat:       "dawdawd",
-	// 	Keluhan:      "sakit hati",
-	// })
-	// log.Println("Berhasil add")
-
 	api := api.NewAPI(pasienDB)
 	api.Start()
 }

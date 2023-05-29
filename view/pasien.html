@@ -1,9 +1,8 @@
 {{ $id := 0 }}
 {{ range .data }}
-
-
 <tr>
-    <td>{{ inc $id 1 }}</td>
+    {{ $id = inc $id 1 }}
+    <td>{{ $id }}</td>
     <td class="text-center">{{ .Model.ID }}</td>
     <td>{{ .NamaLengkap }}</td>
     <td class="text-center">{{ .NIK }}</td>
@@ -20,7 +19,4 @@
         </div>
     </td>
 </tr>
-<script>
-    console.log("Data ID:", "{{ .Model.ID }}");
-</script>
 {{ end }}
